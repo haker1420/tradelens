@@ -92,10 +92,10 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     implementation("com.google.android.gms:play-services-auth:21.0.0")
 
-    // ১. Google Play Billing
+    // 1. Google Play Billing
     implementation("com.android.billingclient:billing-ktx:7.1.1")
 
-    // ২. Google AdMob
+    // 2. Google AdMob
     implementation("com.google.android.gms:play-services-ads:23.0.0")
     //loteAnimation
     implementation("com.airbnb.android:lottie-compose:6.3.0")

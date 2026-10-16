@@ -14,7 +14,7 @@ class BillingManager(private val context: Context) {
     private val _isProUser = MutableStateFlow(false)
     val isProUser = _isProUser.asStateFlow()
 
-    // ✅ NEW: গুগল প্লে স্টোরের চেকিং শেষ হয়েছে কি না, তা বোঝার জন্য
+    // ✅ NEW: Track whether Google Play Store check has completed
     private val _isBillingClientReady = MutableStateFlow(false)
     val isBillingClientReady = _isBillingClientReady.asStateFlow()
 
@@ -56,11 +56,11 @@ class BillingManager(private val context: Context) {
                     checkSubscriptionStatus()
                     loadProductPrices()
 
-                    // ✅ চেকিং শেষ, এখন অ্যাপকে জানিয়ে দাও যে নেভিগেশন করা সেফ!
+                    // ✅ Checking complete, safe to navigate
                     _isBillingClientReady.value = true
                 } else {
                     Log.e(TAG, "Billing Setup Failed: ${billingResult.debugMessage}")
-                    _isBillingClientReady.value = true // ফেইল হলেও অ্যাপ যেন আটকে না থাকে
+                    _isBillingClientReady.value = true // Prevent app from hanging even if check fails
                 }
             }
 

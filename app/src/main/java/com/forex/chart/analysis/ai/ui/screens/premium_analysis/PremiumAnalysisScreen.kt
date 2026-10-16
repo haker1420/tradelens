@@ -39,7 +39,7 @@ fun PremiumAnalysisScreen(
     val currentStep by viewModel.currentStep.collectAsState()
     val haptic = LocalHapticFeedback.current
 
-    // মাল্টিপল ইমেজ স্টেট (সর্বোচ্চ ৩টি)
+    // Multiple image selection state (up to 3)
     var selectedImages by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
     LaunchedEffect(currentStep) {
@@ -51,15 +51,15 @@ fun PremiumAnalysisScreen(
         }
     }
 
-    // মাল্টিপল ইমেজ পিকার
+    // Multiple image picker launcher
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris: List<Uri> ->
-        val newImages = (selectedImages + uris).take(3) // ৩টির বেশি নিবে না
+        val newImages = (selectedImages + uris).take(3) // Limit to maximum 3 images
         selectedImages = newImages
     }
 
-    // সাইবার-ব্লু ব্যাকগ্রাউন্ড
+    // Cyber-Blue background theme
     val bgGradient = Brush.verticalGradient(
         colors = listOf(Color(0xFF060A14), Color(0xFF0A1224))
     )
@@ -75,7 +75,7 @@ fun PremiumAnalysisScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // === হেডার সেকশন ===
+            // === Header Section ===
             Icon(
                 imageVector = Icons.Default.DocumentScanner,
                 contentDescription = "Scanner",
@@ -98,9 +98,9 @@ fun PremiumAnalysisScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // === মেইন কন্টেন্ট (আপলোড অথবা প্রসেসিং) ===
+            // === Main Content (Upload or Processing) ===
             if (currentStep == AnalysisStep.IDLE) {
-                // ১. ইমেজ প্রিভিউ সেকশন
+                // 1. Image Preview Section
                 if (selectedImages.isNotEmpty()) {
                     ImagePreviewSection(
                         images = selectedImages,
@@ -109,17 +109,17 @@ fun PremiumAnalysisScreen(
                     Spacer(modifier = Modifier.height(20.dp))
                 }
 
-                // ২. আপলোড বক্স (৩টার কম থাকলে দেখাবে)
+                // 2. Upload Box (visible when less than 3 images)
                 if (selectedImages.size < 3) {
                     UploadBox { galleryLauncher.launch("image/*") }
                     Spacer(modifier = Modifier.height(24.dp))
                 }
 
-                // ৩. সাবমিট বাটন (অন্তত ১টা ছবি থাকলে দেখাবে)
+                // 3. Submit Button (visible when at least 1 image is selected)
                 AnimatedVisibility(visible = selectedImages.isNotEmpty()) {
                     Button(
                         onClick = {
-                            // শুধুমাত্র প্রথম ছবিটা ব্যাকএন্ডে পাঠাচ্ছি (যেহেতু API একটা সাপোর্ট করে আপাতত)
+                            // Send first image to backend API for analysis
                             selectedImages.firstOrNull()?.let { uri ->
                                 viewModel.startProAnalysis(uri.toString())
                             }
@@ -141,7 +141,7 @@ fun PremiumAnalysisScreen(
                     }
                 }
             } else {
-                // ৪. প্রসেসিং অ্যানিমেশন
+                // 4. Processing Animation
                 ProcessingChecklistCard(currentStep)
             }
         }
@@ -149,7 +149,7 @@ fun PremiumAnalysisScreen(
 }
 
 // ==========================================
-// ইমেজ প্রিভিউ কম্পোনেন্ট
+// Image preview component
 // ==========================================
 @Composable
 fun ImagePreviewSection(images: List<Uri>, onRemove: (Uri) -> Unit) {
@@ -173,7 +173,7 @@ fun ImagePreviewSection(images: List<Uri>, onRemove: (Uri) -> Unit) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
-                // রিমুভ বাটন
+                // Remove image button
                 IconButton(
                     onClick = { onRemove(uri) },
                     modifier = Modifier
@@ -190,7 +190,7 @@ fun ImagePreviewSection(images: List<Uri>, onRemove: (Uri) -> Unit) {
 }
 
 // ==========================================
-// গ্লোয়িং আপলোড বক্স
+// Glowing upload box
 // ==========================================
 @Composable
 fun UploadBox(onClick: () -> Unit) {
@@ -235,7 +235,7 @@ fun UploadBox(onClick: () -> Unit) {
 }
 
 // ==========================================
-// হাই-টেক চেকলিস্ট অ্যানিমেশন
+// High-tech checklist animation
 // ==========================================
 @Composable
 fun ProcessingChecklistCard(currentStep: AnalysisStep) {
@@ -253,17 +253,17 @@ fun ProcessingChecklistCard(currentStep: AnalysisStep) {
             }
             Spacer(modifier = Modifier.height(24.dp))
 
-            // স্মার্ট ধাপগুলো (কোম্পানির নাম ছাড়া)
+            // Analysis processing steps
             ChecklistItem("Deep scanning chart structures", currentStep >= AnalysisStep.SCANNING_VISION, currentStep > AnalysisStep.SCANNING_VISION)
             ChecklistItem("Processing institutional order flow", currentStep >= AnalysisStep.ANALYZING_DEEPSEEK, currentStep > AnalysisStep.ANALYZING_DEEPSEEK)
             ChecklistItem("Mapping precision target zones", currentStep >= AnalysisStep.GENERATING_CHART, currentStep > AnalysisStep.GENERATING_CHART)
 
-            // লাস্ট স্টেপ এবং স্পেশাল মেসেজ
+            // Final step and status message
             ChecklistItem("Finalizing strategy & risk profile", currentStep >= AnalysisStep.FINALIZING, currentStep > AnalysisStep.FINALIZING)
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // বিশেষ মেসেজ (Take some time...)
+            // Note: Analysis may take a moment...
             AnimatedVisibility(visible = currentStep >= AnalysisStep.FINALIZING) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF00D4FF).copy(alpha = 0.1f)),

@@ -69,7 +69,7 @@ data class AnalysisResultModel(
     @get:PropertyName("aiAnalysisReport") @set:PropertyName("aiAnalysisReport")
     var aiAnalysisReport: List<ReportSection> = emptyList()
 ) {
-    // ডাটাবেস থেকে নাম্বার বা স্ট্রিং যাই আসুক না কেন অ্যাপ ক্র্যাশ করবে না।
+    // Safely parses numbers or strings from DB without crashing
     @get:PropertyName("entryPrice") @set:PropertyName("entryPrice")
     var _entryPrice: Any = ""
 
@@ -79,7 +79,7 @@ data class AnalysisResultModel(
     @get:PropertyName("takeProfit") @set:PropertyName("takeProfit")
     var _takeProfit: Any = ""
 
-    // ✅ FIX: @get:Exclude দেওয়া হলো যাতে ফায়ারবেস কনফিউজড না হয়।
+    // ✅ FIX: Added @get:Exclude so Firestore does not serialize this property
     @get:Exclude
     val entryPrice: String get() = _entryPrice.toString()
 

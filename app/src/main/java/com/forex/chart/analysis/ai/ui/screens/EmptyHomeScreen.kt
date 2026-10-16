@@ -46,10 +46,10 @@ fun EmptyHomeScreen(
 ) {
     val context = LocalContext.current
 
-    // ✅ SharedPreferences ইনিশিয়ালাইজ করা হলো
+    // ✅ Initialize SharedPreferences
     val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
 
-    // ✅ মেমরি থেকে চেক করবে। প্রথমবার true পাবে, ক্লিক করার পর false হয়ে যাবে।
+    // ✅ Check from memory: true on first launch, false after clicking.
     var showReviewCard by remember {
         mutableStateOf(sharedPreferences.getBoolean("show_review_card", true))
     }
@@ -77,10 +77,10 @@ fun EmptyHomeScreen(
 
         // ✅ Updated Banner Logic
         if (isProUser) {
-            // Pro User হলে এটা দেখাবে
+            // Display this for Pro Users
             ProUserBanner()
         } else {
-            // Free User হলে আগের ব্যানার দেখাবে (ক্লিক করলে পেমেন্ট পপআপ)
+            // Display upgrade banner for Free Users (opens payment dialog on click)
             AiPoweredBanner(onProClick = onBannerProClick)
         }
 
@@ -113,7 +113,7 @@ fun EmptyHomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // ✅ Add Review Card Section (মেমরি লজিক সহ)
+        // ✅ Add Review Card Section (with memory logic)
         if (showReviewCard) {
             AppReviewCard(
                 onAddReviewClick = {

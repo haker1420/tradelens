@@ -52,7 +52,7 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
     }
 
     private fun showAdIfAvailable() {
-        // যদি অলরেডি অ্যাড চলছে বা অ্যাড লোড নেই, তবে দেখাবে না
+        // If ad is already showing or not loaded, do not display
         if (isShowingAd || !isAdAvailable()) {
             loadAd(application)
             return
@@ -62,7 +62,7 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
             override fun onAdDismissedFullScreenContent() {
                 appOpenAd = null
                 isShowingAd = false
-                loadAd(application) // পরের বারের জন্য লোড করে রাখা
+                loadAd(application) // Preload for the next time
             }
 
             override fun onAdShowedFullScreenContent() {
@@ -70,13 +70,13 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
             }
         }
 
-        // বর্তমান অ্যাক্টিভিটি খুঁজে বের করে সেখানে অ্যাড দেখানো
+        // Show ad in current foreground activity
         currentActivity?.let {
             appOpenAd?.show(it)
         }
     }
 
-    // বর্তমান অ্যাক্টিভিটি ট্র্যাক করার জন্য ছোট লজিক
+    // Helper logic to track current foreground activity
     companion object {
         var currentActivity: Activity? = null
     }

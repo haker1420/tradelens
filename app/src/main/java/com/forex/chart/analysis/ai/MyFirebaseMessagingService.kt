@@ -12,13 +12,13 @@ import com.google.firebase.messaging.RemoteMessage
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    // নতুন টোকেন জেনারেট হলে এখানে পাওয়া যাবে
+    // Called when a new FCM token is generated
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // প্রয়োজনে সার্ভারে টোকেন পাঠাতে পারো
+        // Send token to server if needed
     }
 
-    // নোটিফিকেশন রিসিভ করলে এই ফাংশনটি কল হয়
+    // Called when a push notification is received
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
@@ -38,7 +38,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val channelId = "forex_ai_notifications"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.name_logo) // তোমার অ্যাপের লোগো আইকন দাও
+            .setSmallIcon(R.drawable.name_logo) // Set app logo icon
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
@@ -47,7 +47,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // অ্যান্ড্রয়েড ওরিও (API 26) এর উপরে চ্যানেল প্রয়োজন
+        // Notification channel required for Android Oreo (API 26+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,

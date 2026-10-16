@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-// ✅ Context পাওয়ার জন্য ViewModel থেকে AndroidViewModel করা হলো
+// ✅ Converted ViewModel to AndroidViewModel to access application context
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
-    // তোমার কাস্টম ডেটাবেসের নাম
+    // Custom database name
     private val db = FirebaseFirestore.getInstance("trade-chart-db")
 
-    // ✅ BillingManager ইনিশিয়ালাইজ করা হলো
+    // ✅ Initialize BillingManager
     private val billingManager = BillingManager(application.applicationContext)
 
     private val _newsList = MutableStateFlow<List<NewsModel>>(emptyList())
@@ -33,12 +33,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         fetchMarketNews()
-        observePremiumStatus() // ✅ BillingManager থেকে লাইভ স্ট্যাটাস নেবে
+        observePremiumStatus() // ✅ Observe live status from BillingManager
     }
 
     private fun fetchMarketNews() {
         db.collection("market_news")
-            .orderBy("publishedAt", Query.Direction.DESCENDING) // নতুন খবর আগে দেখাবে
+            .orderBy("publishedAt", Query.Direction.DESCENDING) // Order by newest first
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Log.e("NewsViewModel", "Error fetching news", error)
@@ -59,7 +59,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun observePremiumStatus() {
         viewModelScope.launch {
-            // BillingManager এর isProUser ফ্লো-কে অবজার্ভ করবে
+            // Observe BillingManager isProUser flow
             billingManager.isProUser.collect { isPro ->
                 _isPremiumUser.value = isPro
             }

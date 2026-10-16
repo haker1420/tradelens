@@ -43,11 +43,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG = "HomeViewModel"
     private val repository = AnalysisRepository(application.applicationContext)
-    private val db = FirebaseFirestore.getInstance("trade-chart-db") // নোট: ডাটাবেসের নাম আগেরটাই আছে, দরকার হলে পরিবর্তন করে নেবেন
+    private val db = FirebaseFirestore.getInstance("trade-chart-db") // Note: Using existing Firestore database instance name
     private val auth = FirebaseAuth.getInstance()
     private val billingManager = BillingManager(application)
 
-    // ✅ FIX: MainScreen এর জন্য isBillingClientReady expose করা হলো
+    // ✅ FIX: Expose isBillingClientReady for MainScreen
     val isBillingClientReady: StateFlow<Boolean> = billingManager.isBillingClientReady
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -59,12 +59,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     var pendingPlanId: String? = null
 
     init {
-        // ✅ FIX: সরাসরি loadUserData() কল না করে, আগে আইডি কনফার্ম করা হচ্ছে
+        // ✅ FIX: Confirm user ID before calling loadUserData()
         initializeUserAndData()
         observeBillingData()
     }
 
-    // ✅ NEW: প্রথমবার অ্যাপ ওপেন করলে আগে লগইন নিশ্চিত করবে, তারপর ডাটাবেস লোড করবে
+    // ✅ NEW: Ensure auth completion before querying Firestore on initial launch
     private fun initializeUserAndData() {
         val user = auth.currentUser
         if (user == null) {
@@ -160,7 +160,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 )
                 db.collection("users").document(uid).set(initialData)
 
-                // ✅ FIX: ডাটাবেসে সেভ হওয়ার সাথে সাথেই UI কে জানিয়ে দেওয়া হলো যাতে সঙ্গে সঙ্গে প্রো কার্ড দেখায়!
+                // ✅ FIX: Update UI immediately upon DB save to show Pro status right away
                 _freeAnalysisCount.value = 0
                 _uiState.update { it.copy(freeProScanCount = 0, hasRated = false) }
             }

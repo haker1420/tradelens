@@ -174,7 +174,7 @@ fun ChatScreen(
                 if (isLoading) { item { TypingIndicator() } }
             }
 
-            // ইনপুট এরিয়া (একদম আগের মতই)
+            // Input area
             Box(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
                 Column(
                     modifier = Modifier
@@ -292,7 +292,7 @@ fun ProContextCard(analysis: AnalysisResultModel) {
     }
 }
 
-// ... বাকি সমস্ত Composable (ChatBubble, FormattedMessageContent, TypingIndicator, ContextCard) আগের মতই থাকবে।
+// ... Remaining composables (ChatBubble, FormattedMessageContent, TypingIndicator, ContextCard) ...
 @Composable
 fun ChatBubble(message: ChatMessage) {
     val isUser = message.isUser

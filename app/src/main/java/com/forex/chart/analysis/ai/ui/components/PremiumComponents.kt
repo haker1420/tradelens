@@ -37,27 +37,27 @@ fun PremiumPlanDialog(
     onLoginRequest: (String) -> Unit,
     onSubscribe: (String) -> Unit
 ) {
-    // বাই ডিফল্ট "year" সিলেক্ট করা থাকলো যাতে ইউজাররা ইয়ারলি কিনতে বেশি আগ্রহী হয়
+    // Pre-select 'year' by default to encourage yearly subscription
     var selectedPlan by remember { mutableStateOf("year") }
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false) // চওড়া করার জন্য
+        properties = DialogProperties(usePlatformDefaultWidth = false) // Width styling
     ) {
         Card(
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(containerColor = Color(0xFF161F2E)), // Dark Premium Background
             modifier = Modifier
-                .fillMaxWidth(0.92f) // স্ক্রিনের ৯২% জায়গা নেবে
+                .fillMaxWidth(0.92f) // Take 92% of screen width
                 .padding(vertical = 16.dp)
         ) {
             Column(
                 modifier = Modifier
                     .padding(20.dp)
-                    .verticalScroll(rememberScrollState()), // ছোট স্ক্রিনে স্ক্রল করার জন্য
+                    .verticalScroll(rememberScrollState()), // Scrollable on smaller screens
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Header (আইকন ও টেক্সট পাশাপাশি এনে উচ্চতা কমানো হয়েছে)
+                // Header (icon and title placed side by side to save height)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Diamond,
@@ -78,7 +78,7 @@ fun PremiumPlanDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ✅ NEW: আপডেট করা ফিচার লিস্ট (প্যাডিং কমিয়ে কম্প্যাক্ট করা হয়েছে)
+                // ✅ NEW: Updated compact feature list
                 Column(modifier = Modifier.fillMaxWidth()) {
                     FeatureItem("Unlimited Deep Chart Analysis")
                     FeatureItem("AI Entry & Exit Suggestions")
@@ -93,7 +93,7 @@ fun PremiumPlanDialog(
                 PlanOption(
                     title = "Weekly",
                     price = weeklyPrice,
-                    originalPrice = "₹349", // অরিজিনাল ফেক দাম
+                    originalPrice = "₹349", // Original strike-through price
                     selected = selectedPlan == "week",
                     onClick = { selectedPlan = "week" }
                 )
@@ -104,7 +104,7 @@ fun PremiumPlanDialog(
                 PlanOption(
                     title = "Monthly",
                     price = monthlyPrice,
-                    originalPrice = "₹999", // অরিজিনাল ফেক দাম
+                    originalPrice = "₹999", // Original strike-through price
                     selected = selectedPlan == "month",
                     onClick = { selectedPlan = "month" }
                 )
@@ -115,7 +115,7 @@ fun PremiumPlanDialog(
                 PlanOption(
                     title = "Yearly",
                     price = yearlyPrice,
-                    originalPrice = "₹6999", // অরিজিনাল ফেক দাম
+                    originalPrice = "₹6999", // Original strike-through price
                     badge = "🔥 BEST VALUE",
                     selected = selectedPlan == "year",
                     onClick = { selectedPlan = "year" }
@@ -168,7 +168,7 @@ fun FeatureItem(text: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp), // প্যাডিং কমানো হয়েছে
+            .padding(vertical = 4.dp), // Reduced padding for compact layout
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

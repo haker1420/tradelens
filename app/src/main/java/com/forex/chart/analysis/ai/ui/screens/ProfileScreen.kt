@@ -64,7 +64,7 @@ fun ProfileScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showPremiumDialog by remember { mutableStateOf(false) }
 
-    // পেন্ডিং পেমেন্ট প্ল্যান ট্র্যাক করার জন্য
+    // Track pending payment plan
     var pendingPlanId by remember { mutableStateOf<String?>(null) }
 
     val googleSignInLauncher = rememberLauncherForActivityResult(
@@ -232,7 +232,7 @@ fun ProfileScreen(
                 }
             },
 
-            // ✅ যদি গেস্ট হয় -> লগইন রিকোয়েস্ট
+            // ✅ If guest user -> request login
             onLoginRequest = { planId ->
                 pendingPlanId = planId
                 showPremiumDialog = false
@@ -248,7 +248,7 @@ fun ProfileScreen(
                 Toast.makeText(context, "Please login to subscribe", Toast.LENGTH_SHORT).show()
             },
 
-            // ✅ যদি লগইন থাকে -> সরাসরি কিনবে
+            // ✅ If authenticated -> proceed directly to purchase
             onSubscribe = { planId ->
                 val activity = context as? Activity
                 if (activity != null) {

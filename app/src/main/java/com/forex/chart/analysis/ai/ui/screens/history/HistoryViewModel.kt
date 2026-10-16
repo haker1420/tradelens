@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.forex.chart.analysis.ai.data.model.AnalysisResponse
 import com.forex.chart.analysis.ai.data.repository.AnalysisRepository
-import com.forex.chart.analysis.ai.ui.screens.premium_analysis.AnalysisResultModel // ✅ প্রো মডেল ইমপোর্ট করা হলো
+import com.forex.chart.analysis.ai.ui.screens.premium_analysis.AnalysisResultModel // ✅ Import Pro analysis model
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,13 +17,13 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     private val repository = AnalysisRepository(application.applicationContext)
 
     // ==========================================
-    // ১. ফ্রি (Standard) হিস্ট্রির জন্য
+    // 1. For Standard (Free) History
     // ==========================================
     private val _historyList = MutableStateFlow<List<AnalysisResponse>>(emptyList())
     val historyList: StateFlow<List<AnalysisResponse>> = _historyList.asStateFlow()
 
     // ==========================================
-    // ২. প্রো (Premium) হিস্ট্রির জন্য
+    // 2. For Premium (Pro) History
     // ==========================================
     private val _proHistoryList = MutableStateFlow<List<AnalysisResultModel>>(emptyList())
     val proHistoryList: StateFlow<List<AnalysisResultModel>> = _proHistoryList.asStateFlow()
@@ -33,7 +33,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         loadHistory()
-        loadProHistory() // ✅ অ্যাপ চালুর সাথে সাথে প্রো হিস্ট্রিও লোড হবে
+        loadProHistory() // ✅ Load Pro history upon initialization
     }
 
     private fun loadHistory() {

@@ -597,7 +597,7 @@ fun ProUserBanner() {
     }
 }
 
-// ✅ আপনার ফরেক্স চার্টের আগের পাশাপাশি বক্স ডিজাইনটাই রাখা হলো
+// Preserved side-by-side box layout design
 @Composable
 fun UploadInstructionCard(onImageUploadClicked: () -> Unit, onCameraCaptureClicked: () -> Unit) {
     val cardGradient = Brush.verticalGradient(colors = listOf(Color(0xFF00202A), Color(0xFF10313B)))
@@ -666,7 +666,7 @@ fun UploadInstructionCard(onImageUploadClicked: () -> Unit, onCameraCaptureClick
     }
 }
 
-// ✅ এখানে ছবি আপলোডের পরের বাটন এবং লেআউট হুবহু ট্রেড চার্টের মতো করা হলো
+// Upload button and layout matching chart design
 @Composable
 fun SelectedImagesScreen(
     images: List<Uri>,

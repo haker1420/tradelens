@@ -9,32 +9,32 @@ import java.io.InputStream
 import kotlin.math.min
 
 object ImageResizer {
-    private const val MAX_SIZE = 1024 // টার্গেট সাইজ ১০২৪ পিক্সেল
+    private const val MAX_SIZE = 1024 // Target size: 1024px
 
     fun reduceImageSize(context: Context, imageUri: Uri): ByteArray? {
         return try {
             val contentResolver = context.contentResolver
 
-            // ১. শুধু ডাইমেনশন চেক করা (মেমোরি সেভ করার জন্য)
+            // 1. Decode bounds only to preserve memory
             val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
             var inputStream: InputStream? = contentResolver.openInputStream(imageUri)
             BitmapFactory.decodeStream(inputStream, null, options)
             inputStream?.close()
 
-            // ২. স্যাম্পল সাইজ বের করা
+            // 2. Calculate optimal inSampleSize
             options.inSampleSize = calculateInSampleSize(options, MAX_SIZE, MAX_SIZE)
             options.inJustDecodeBounds = false
 
-            // ৩. ইমেজ লোড করা
+            // 3. Load subsampled bitmap
             inputStream = contentResolver.openInputStream(imageUri)
             val originalBitmap = BitmapFactory.decodeStream(inputStream, null, options)
             inputStream?.close()
 
             originalBitmap?.let { bitmap ->
-                // ৪. রিসাইজ করা
+                // 4. Resize to target dimension
                 val resizedBitmap = getResizedBitmap(bitmap, MAX_SIZE)
 
-                // ৫. কম্প্রেস করে ByteArray বানানো (Quality 80%)
+                // 5. Compress to ByteArray (80% JPEG quality)
                 val outputStream = ByteArrayOutputStream()
                 resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
                 outputStream.toByteArray()

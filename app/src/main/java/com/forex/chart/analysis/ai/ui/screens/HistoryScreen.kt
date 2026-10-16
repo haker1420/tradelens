@@ -59,15 +59,15 @@ fun HistoryScreen(
     val billingManager = remember { BillingManager(context) }
     val adMobManager = remember { AdMobManager(context) }
 
-    // ✅ Pro Status চেক
+    // ✅ Pro status check
     val isProUser by billingManager.isProUser.collectAsState(initial = false)
     val prices by billingManager.productPrices.collectAsState(initial = emptyMap())
 
     val weeklyPrice = prices["weekly_pro_plan"] ?: "Loading..."
     val monthlyPrice = prices["monthly_pro_plan"] ?: "Loading..."
-    val yearlyPrice = prices["yearly_pro_plan"] ?: "Loading..." // ✅ NEW: ইয়ারলি প্রাইস অ্যাড করা হলো
+    val yearlyPrice = prices["yearly_pro_plan"] ?: "Loading..." // ✅ NEW: Added yearly plan pricing
 
-    // ফ্রি ইউজারদের জন্য
+    // For free users
     var selectedAnalysis by remember { mutableStateOf<AnalysisResponse?>(null) }
 
     LaunchedEffect(selectedAnalysis) {
@@ -75,7 +75,7 @@ fun HistoryScreen(
     }
 
     // ==========================================
-    // ফ্রি ইউজারদের ইনলাইন রেজাল্ট স্ক্রিন
+    // Inline result screen for free users
     // ==========================================
     if (selectedAnalysis != null && !isProUser) {
         BackHandler { selectedAnalysis = null }
@@ -83,10 +83,10 @@ fun HistoryScreen(
         StandardResultScreen(
             data = selectedAnalysis!!,
             localImageUri = null,
-            isChatLocked = true, // ফ্রি ইউজার তাই চ্যাট লক থাকবে
+            isChatLocked = true, // Chat remains locked for free users
             weeklyPrice = weeklyPrice,
             monthlyPrice = monthlyPrice,
-            yearlyPrice = yearlyPrice, // ✅ NEW: ডায়ালগে পাঠানোর জন্য ইয়ারলি প্রাইস দেওয়া হলো
+            yearlyPrice = yearlyPrice, // ✅ NEW: Pass yearly price to dialog
             onChatClicked = {
                 selectedAnalysis?.let { analysis ->
                     chatViewModel.startSession(analysis, newSession = true)
@@ -97,7 +97,7 @@ fun HistoryScreen(
             onBuyPro = { planId ->
                 val activity = context as? Activity
                 if (activity != null) {
-                    // ✅ NEW: when ব্লক দিয়ে সব প্ল্যান কেনার লজিক সাজানো হলো
+                    // ✅ NEW: Purchasing logic for all subscription plans
                     when {
                         planId.contains("weekly") -> billingManager.purchaseWeeklyPlan(activity)
                         planId.contains("monthly") -> billingManager.purchaseMonthlyPlan(activity)
@@ -109,13 +109,13 @@ fun HistoryScreen(
 
     } else {
         // ==========================================
-        // মেইন হিস্ট্রি স্ক্রিন (লিস্ট ভিউ)
+        // Main history screen (list view)
         // ==========================================
         Column(
             modifier = Modifier.fillMaxSize().background(AppBackground).padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                // প্রো হলে আইকন ও টেক্সট সাইবার-ব্লু হবে, ফ্রি হলে গোল্ডেন
+                // Cyber-Blue styling for Pro, Golden for Free
                 Icon(
                     imageVector = Icons.Default.History,
                     contentDescription = null,
@@ -135,7 +135,7 @@ fun HistoryScreen(
                 }
             } else if (isProUser) {
                 // ==========================================
-                // প্রো ইউজার লিস্ট (Cyber-Blue)
+                // Pro user list (Cyber-Blue)
                 // ==========================================
                 if (proHistoryList.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("No pro scans yet.", color = Color.Gray) }
@@ -162,7 +162,7 @@ fun HistoryScreen(
                 }
             } else {
                 // ==========================================
-                // ফ্রি ইউজার লিস্ট (Golden)
+                // Free user list (Golden)
                 // ==========================================
                 if (historyList.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("No history yet.", color = Color.Gray) }
@@ -191,7 +191,7 @@ fun HistoryScreen(
 }
 
 // ==========================================
-// ফ্রি ইউজারদের হিস্ট্রি কার্ড (আগের মতোই থাকবে)
+// Free user history card
 // ==========================================
 @Composable
 fun HistoryItemCard(item: AnalysisResponse, onClick: () -> Unit) {
@@ -234,7 +234,7 @@ fun HistoryItemCard(item: AnalysisResponse, onClick: () -> Unit) {
 }
 
 // ==========================================
-// প্রো ইউজারদের হিস্ট্রি কার্ড (Cyber-Blue Look)
+// Pro user history card (Cyber-Blue design)
 // ==========================================
 @Composable
 fun ProHistoryItemCard(item: AnalysisResultModel, onClick: () -> Unit) {

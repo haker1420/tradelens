@@ -456,7 +456,7 @@ fun AnalysisResultScreen(
 @Composable
 fun DisclaimerSection() {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A0C0C)), // হালকা লালচে কালো
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A0C0C)), // Subtle dark red tint
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, Color(0xFFFF5252).copy(alpha = 0.3f)),
         modifier = Modifier.fillMaxWidth()

@@ -35,7 +35,7 @@ import com.forex.chart.analysis.ai.ui.screens.PremiumRatingDialog
 fun AnalysisResultScreen(
     viewModel: PremiumAnalysisViewModel,
     onBack: () -> Unit,
-    onOpenChat: () -> Unit // ✅ NEW: চ্যাট ওপেন করার জন্য নতুন প্যারামিটার
+    onOpenChat: () -> Unit // ✅ NEW: Callback parameter to open chat
 ) {
     val result by viewModel.analysisResult.collectAsState()
     val showRatingDialog by viewModel.showRatingDialog.collectAsState()
@@ -75,12 +75,12 @@ fun AnalysisResultScreen(
             )
         },
         containerColor = Color(0xFF080B12),
-        // ✅ NEW: Bottom Right এ Floating Action Button অ্যাড করা হলো
+        // ✅ NEW: Added floating action button to bottom right
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { onOpenChat() },
-                containerColor = Color(0xFFD1A054), // গোল্ডেন কালার
-                contentColor = Color(0xFF080B12),   // ডার্ক টেক্সট
+                containerColor = Color(0xFFD1A054), // Gold accent color
+                contentColor = Color(0xFF080B12),   // Dark text color
                 icon = { Icon(Icons.Default.SmartToy, contentDescription = "Pro Chat") },
                 text = { Text("PRO CHAT", fontWeight = FontWeight.ExtraBold, letterSpacing = 1.sp) },
                 elevation = FloatingActionButtonDefaults.elevation(
@@ -92,7 +92,7 @@ fun AnalysisResultScreen(
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
-            // পেছনের ডাইনামিক গ্লো ইফেক্ট
+            // Dynamic background glow effect
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,7 +106,7 @@ fun AnalysisResultScreen(
                     .padding(paddingValues)
                     .verticalScroll(rememberScrollState())
             ) {
-                // ১. অ্যানালাইজড চার্ট ইমেজ (Premium Border)
+                // 1. Analyzed Chart Image (Premium Border)
                 Box(modifier = Modifier.padding(16.dp)) {
                     AsyncImage(
                         model = data.analyzedImageUrl,
@@ -121,7 +121,7 @@ fun AnalysisResultScreen(
                 }
 
                 Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                    // ২. মেইন সিগন্যাল কার্ড
+                    // 2. Main Signal Card
                     TradeSignalCard(data.tradeSignal, data.confidenceScore, data.timeframe, glowColor)
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +143,7 @@ fun AnalysisResultScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // ৩. এন্ট্রি এবং টার্গেট জোন
+                    // 3. Entry and Target Zones
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         PriceActionCard("ENTRY", data.entryPrice, Icons.Default.Login, Color(0xFF00E676), Modifier.weight(1f))
                         PriceActionCard("TARGET", data.takeProfit, Icons.Default.Flag, Color(0xFFD1A054), Modifier.weight(1f))
@@ -152,14 +152,14 @@ fun AnalysisResultScreen(
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    // ৪. প্রফেশনাল ডেটা টেবিল
+                    // 4. Professional Metrics Table
                     SectionHeader(icon = Icons.Default.Analytics, title = "Institutional Metrics")
                     Spacer(modifier = Modifier.height(12.dp))
                     ProMetricsTable(data.detailedMetricsTable)
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    // ৫. Tradechart Pro Breakdown
+                    // 5. Tradechart Pro Breakdown
                     SectionHeader(icon = Icons.Default.Psychology, title = "AI Logic Breakdown")
                     Spacer(modifier = Modifier.height(12.dp))
 
@@ -196,7 +196,7 @@ fun AnalysisResultScreen(
 
                     Spacer(modifier = Modifier.height(30.dp))
                     DisclaimerCard()
-                    Spacer(modifier = Modifier.height(80.dp)) // ✅ NEW: চ্যাট বাটনের জন্য নিচে একটু বেশি ফাঁকা জায়গা রাখা হলো
+                    Spacer(modifier = Modifier.height(80.dp)) // ✅ NEW: Added bottom spacing for floating chat button
                 }
             }
         }
@@ -221,7 +221,7 @@ fun AnalysisResultScreen(
     }
 }
 
-// ... বাকি সব কম্পোনেন্ট (ProMetricsTable, TradeSignalCard, RiskProfileBadge, PriceActionCard, SectionHeader, DisclaimerCard) আগের মতোই থাকবে! ...
+// ... Remaining components (ProMetricsTable, TradeSignalCard, etc.) ...
 
 @Composable
 fun ProMetricsTable(metrics: List<MetricRow>) {

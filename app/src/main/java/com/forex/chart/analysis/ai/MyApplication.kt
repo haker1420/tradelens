@@ -15,11 +15,11 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
         registerActivityLifecycleCallbacks(this)
         MobileAds.initialize(this) {}
 
-        // অ্যাপ ওপেন অ্যাড ম্যানেজার শুরু করা
+        // Initialize App Open Ad Manager
         appOpenAdManager = AppOpenAdManager(this)
     }
 
-    // নিচের মেথডগুলো বর্তমান অ্যাক্টিভিটি ট্র্যাক করতে সাহায্য করে
+    // Methods below help track current Activity lifecycle
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
     override fun onActivityStarted(activity: Activity) {
         AppOpenAdManager.currentActivity = activity

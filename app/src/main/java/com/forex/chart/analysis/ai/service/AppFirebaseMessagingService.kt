@@ -52,7 +52,7 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "Market News Alerts", // ব্যবহারকারী এই নামটি সেটিংসে দেখতে পাবেন
+                "Market News Alerts", // User will see this channel name in system settings
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 val audioAttributes = AudioAttributes.Builder()
@@ -60,19 +60,19 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build()
 
-                setSound(soundUri, audioAttributes) // নতুন চ্যানেলে সাউন্ড যুক্ত করা হলো
+                setSound(soundUri, audioAttributes) // Attached sound to notification channel
                 enableVibration(true)
             }
             notificationManager.createNotificationChannel(channel)
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher) // প্রয়োজনে এখানে আপনার নোটিফিকেশন আইকন (যেমন: R.drawable.ic_notification) দিন
+            .setSmallIcon(R.mipmap.ic_launcher) // Set custom notification icon if needed (e.g. R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound(soundUri) // অ্যান্ড্রয়েড ৮.০ এর আগের ভার্সনের জন্য
+            .setSound(soundUri) // For versions prior to Android 8.0
             .setVibrate(longArrayOf(1000, 1000))
             .setContentIntent(pendingIntent)
 

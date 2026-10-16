@@ -63,7 +63,7 @@ fun MainScreen() {
             NavRoute.HISTORY, NavRoute.PROFILE, NavRoute.NEWS, NavRoute.HOME -> {
                 showBottomBar = true
             }
-            // === splash_routing_screen এবং PREMIUM_ONBOARDING এ বটম বার হাইড থাকবে ===
+            // === Hide bottom bar on splash_routing_screen and PREMIUM_ONBOARDING ===
             NavRoute.CAMERA_SCREEN, NavRoute.CHAT_SESSION, NavRoute.WEB_VIEW_SCREEN_TEMPLATE,
             NavRoute.PREMIUM_ANALYSIS, NavRoute.PREMIUM_RESULT,
             NavRoute.PREMIUM_ONBOARDING, "splash_routing_screen" -> {
@@ -83,7 +83,7 @@ fun MainScreen() {
 
         NavHost(
             navController = navController,
-            startDestination = "splash_routing_screen", // ✅ শুরুতেই স্প্ল্যাশ স্ক্রিনে যাবে
+            startDestination = "splash_routing_screen", // ✅ Navigate to splash screen initially
             modifier = Modifier.padding(screenPadding)
         ) {
 
@@ -94,17 +94,17 @@ fun MainScreen() {
                 val isReady by homeViewModel.isBillingClientReady.collectAsState()
                 val uiState by homeViewModel.uiState.collectAsState()
 
-                // ✅ FIX: isReady এবং uiState.isProUser দুটোর উপরেই নির্ভর করবে, যাতে ডেটা সিঙ্ক হতে একটু সময় পেলেও সমস্যা না হয়
+                // ✅ FIX: Depend on both isReady and uiState.isProUser to allow time for data sync
                 LaunchedEffect(isReady, uiState.isProUser) {
                     if (isReady) {
-                        delay(500) // লোগোটা জাস্ট আধা সেকেন্ড দেখানোর জন্য
+                        delay(500) // Display logo for half a second
                         if (uiState.isProUser) {
-                            // প্রো ইউজার হলে সোজা হোমে
+                            // If Pro user, navigate straight to Home
                             navController.navigate(NavRoute.HOME) {
                                 popUpTo("splash_routing_screen") { inclusive = true }
                             }
                         } else {
-                            // ফ্রি ইউজার হলে প্রিমিয়াম অনবোর্ডিং স্ক্রিনে
+                            // If Free user, navigate to Premium Onboarding screen
                             navController.navigate(NavRoute.PREMIUM_ONBOARDING) {
                                 popUpTo("splash_routing_screen") { inclusive = true }
                             }
@@ -112,7 +112,7 @@ fun MainScreen() {
                     }
                 }
 
-                // ডার্ক ব্যাকগ্রাউন্ডের ওপর লোগো এবং লোডার
+                // Logo and loader over dark background
                 Box(
                     modifier = Modifier.fillMaxSize().background(AppBackground),
                     contentAlignment = Alignment.Center

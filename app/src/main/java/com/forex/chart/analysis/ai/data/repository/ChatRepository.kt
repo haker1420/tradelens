@@ -93,7 +93,7 @@ class ChatRepository {
         chatSessionHistory.add(content("model") { text("Understood. I have the context and am ready to answer questions.") })
     }
 
-    // ✅ FIX: ডাটাবেস থেকে মেসেজ রিস্টোর করার সময় পুরনো কনটেক্সট যাতে মুছে না যায়
+    // ✅ FIX: Preserve prior context when restoring messages from DB
     fun restoreHistoryFromDb(messages: List<ChatMessage>) {
         chatSessionHistory.clear()
 

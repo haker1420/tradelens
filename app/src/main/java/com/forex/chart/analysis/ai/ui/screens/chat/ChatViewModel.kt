@@ -33,10 +33,10 @@ class ChatViewModel : ViewModel() {
     private val _currentProAnalysis = MutableStateFlow<AnalysisResultModel?>(null)
     val currentProAnalysis: StateFlow<AnalysisResultModel?> = _currentProAnalysis.asStateFlow()
 
-    private var currentSessionId: String? = null // ✅ Session ID track করার জন্য
+    private var currentSessionId: String? = null // ✅ Track active Session ID
     private val MAX_MESSAGES = 5
 
-    // ফ্রি স্ক্যানের চ্যাট ওপেন করার জন্য
+    // Open chat session for free scan
     fun startSession(analysisData: AnalysisResponse, newSession: Boolean = false) {
         val sessionId = if (newSession) {
             "${analysisData.id}_${System.currentTimeMillis()}"
@@ -54,7 +54,7 @@ class ChatViewModel : ViewModel() {
         loadMessagesFromDb(sessionId)
     }
 
-    // ✅ NEW: প্রো স্ক্যানের চ্যাট ওপেন করার জন্য
+    // ✅ NEW: Open chat session for Pro scan
     fun startProSession(proData: AnalysisResultModel, docId: String) {
         if (currentSessionId == docId) return
 

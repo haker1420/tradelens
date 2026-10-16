@@ -35,7 +35,7 @@ class PremiumAnalysisViewModel(application: Application) : AndroidViewModel(appl
     private val _analysisResult = MutableStateFlow<AnalysisResultModel?>(null)
     val analysisResult: StateFlow<AnalysisResultModel?> = _analysisResult.asStateFlow()
 
-    // ✅ NEW: রেটিং ট্র্যাক করার জন্য স্টেট
+    // ✅ NEW: State for tracking rating dialog
     private val _showRatingDialog = MutableStateFlow(false)
     val showRatingDialog: StateFlow<Boolean> = _showRatingDialog.asStateFlow()
     private var hasRated = false
@@ -44,7 +44,7 @@ class PremiumAnalysisViewModel(application: Application) : AndroidViewModel(appl
         checkRatingStatus()
     }
 
-    // ✅ NEW: ফায়ারবেস থেকে চেক করা হচ্ছে ইউজার আগে রেটিং দিয়েছে কি না
+    // ✅ NEW: Check Firestore if user has already rated
     private fun checkRatingStatus() {
         val uid = auth.currentUser?.uid ?: return
         db.collection("users").document(uid).addSnapshotListener { doc, _ ->
@@ -88,7 +88,7 @@ class PremiumAnalysisViewModel(application: Application) : AndroidViewModel(appl
                             }
                         }
 
-                        // ✅ NEW: প্রো স্ক্যান শেষে রেটিং না দিয়ে থাকলে পপআপ ওপেন হবে
+                        // ✅ NEW: Show rating prompt upon completing Pro scan if not previously rated
                         if (!hasRated) {
                             _showRatingDialog.value = true
                         }

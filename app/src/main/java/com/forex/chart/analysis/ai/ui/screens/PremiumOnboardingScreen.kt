@@ -47,30 +47,30 @@ fun PremiumOnboardingScreen(
     val context = LocalContext.current
     val activity = context as? Activity
 
-    // --- ৫ সেকেন্ড টাইমার এবং প্রগ্রেস স্টেট ---
+    // --- 5-second timer and progress state ---
     var timeLeft by remember { mutableIntStateOf(5) }
     var progress by remember { mutableFloatStateOf(1f) }
     val isTimerFinished = timeLeft <= 0
 
-    // টাইমার লজিক: ৫ সেকেন্ড কাউন্টডাউন
+    // Timer logic: 5-second countdown
     LaunchedEffect(Unit) {
-        val totalTime = 5000L // ৫ সেকেন্ড
-        val step = 50L // প্রতি ৫০ মিলিসেকেন্ডে প্রগ্রেস আপডেট হবে
+        val totalTime = 5000L // 5 seconds
+        val step = 50L // Progress updates every 50ms
         var elapsed = 0L
 
         while (elapsed < totalTime) {
             delay(step)
             elapsed += step
-            // প্রগ্রেস ১.০ থেকে ০.০ এর দিকে কমবে
+            // Progress animates down from 1.0 to 0.0
             progress = 1f - (elapsed.toFloat() / totalTime)
-            // সেকেন্ড আপডেট (৫, ৪, ৩...)
+            // Second countdown update (5, 4, 3...)
             timeLeft = (5 - (elapsed / 1000)).toInt()
         }
         timeLeft = 0
         progress = 0f
     }
 
-    // ইউজার প্রো হলে সরাসরি হোমে পাঠিয়ে দেওয়া
+    // Navigate directly to Home if user is Pro
     LaunchedEffect(uiState.isProUser) {
         if (uiState.isProUser) {
             onNavigateToHome()
@@ -98,7 +98,7 @@ fun PremiumOnboardingScreen(
             .padding(horizontal = 20.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- ১. টপ বার (টাইমার এবং ক্লোজ বাটন) ---
+        // --- 1. Top Bar (Timer & Close button) ---
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
@@ -120,7 +120,7 @@ fun PremiumOnboardingScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (!isTimerFinished) {
-                    // গোল প্রগ্রেস বার
+                    // Circular progress indicator
                     CircularProgressIndicator(
                         progress = { progress },
                         modifier = Modifier.fillMaxSize(),
@@ -128,7 +128,7 @@ fun PremiumOnboardingScreen(
                         strokeWidth = 2.dp,
                         trackColor = Color.White.copy(alpha = 0.1f),
                     )
-                    // বাকি থাকা সেকেন্ড
+                    // Remaining seconds
                     Text(
                         text = "$timeLeft",
                         color = TextWhite,
@@ -136,7 +136,7 @@ fun PremiumOnboardingScreen(
                         fontWeight = FontWeight.Bold
                     )
                 } else {
-                    // ৫ সেকেন্ড শেষ হলে 'X' আইকন দেখাবে
+                    // Show 'X' close button after 5 seconds
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
@@ -149,7 +149,7 @@ fun PremiumOnboardingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- ২. শিরোনাম (Titles) ---
+        // --- 2. Titles ---
         Text(
             text = buildAnnotatedString {
                 append("Maximize your ")
@@ -179,7 +179,7 @@ fun PremiumOnboardingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- ৩. অ্যাপ প্রিভিউ ইমেজ ---
+        // --- 3. App Preview Image ---
         Box(
             modifier = Modifier
                 .weight(1.5f)
@@ -196,7 +196,7 @@ fun PremiumOnboardingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- ৪. প্রাইসিং প্ল্যানস (Horizontal Scroll) ---
+        // --- 4. Pricing Plans (Horizontal Scroll) ---
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -226,7 +226,7 @@ fun PremiumOnboardingScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // --- ৫. পেমেন্ট টেক্সট ---
+        // --- 5. Payment Details Text ---
         Text(
             text = "Billed $selectedPrice per $planDurationText",
             color = TextGray,
@@ -236,7 +236,7 @@ fun PremiumOnboardingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- ৬. কন্টিনিউ বাটন ---
+        // --- 6. Continue Button ---
         Button(
             onClick = {
                 activity?.let { viewModel.triggerPurchase(it, selectedPlanId) }

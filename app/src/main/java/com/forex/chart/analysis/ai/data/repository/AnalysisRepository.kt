@@ -22,7 +22,7 @@ class AnalysisRepository(private val context: Context) {
     private val db = FirebaseFirestore.getInstance("trade-chart-db")
 
     // ==========================================
-    // ১. ছবি আপলোড (Free ও Pro উভয়ের জন্য)
+    // 1. Upload image (for both Free and Pro)
     // ==========================================
     suspend fun uploadImage(uri: Uri, isPro: Boolean = false): Result<String> {
         return try {
@@ -30,7 +30,7 @@ class AnalysisRepository(private val context: Context) {
 
             val fileName = "chart_${UUID.randomUUID()}.jpg"
 
-            // প্রো ইউজার হলে pro_uploads, না হলে uploads
+            // 'pro_uploads' for Pro users, otherwise 'uploads'
             val folderName = if (isPro) "pro_uploads" else "uploads"
             val storageRef = storage.reference.child("users/$userId/$folderName/$fileName")
 
@@ -49,7 +49,7 @@ class AnalysisRepository(private val context: Context) {
     }
 
     // ==========================================
-    // ২. FREE SCAN: সাধারণ ডাটা লিসেনার
+    // 2. FREE SCAN: Standard data listener
     // ==========================================
     fun listenToAnalysis(fileName: String): Flow<AnalysisResponse?> = callbackFlow {
         val userId = auth.currentUser?.uid ?: run {
@@ -57,7 +57,7 @@ class AnalysisRepository(private val context: Context) {
             return@callbackFlow
         }
 
-        // শুধুমাত্র ফ্রি কালেকশনে খুঁজবে
+        // Queries only free collection
         val query = db.collection("users")
             .document(userId)
             .collection("analyzed_charts")
@@ -79,7 +79,7 @@ class AnalysisRepository(private val context: Context) {
     }
 
     // ==========================================
-    // ৩. PRO SCAN: প্রো ডাটা লিসেনার
+    // 3. PRO SCAN: Pro data listener
     // ==========================================
     fun listenToProAnalysis(fileName: String): Flow<AnalysisResultModel?> = callbackFlow {
         val userId = auth.currentUser?.uid ?: run {
@@ -87,7 +87,7 @@ class AnalysisRepository(private val context: Context) {
             return@callbackFlow
         }
 
-        // শুধুমাত্র প্রো কালেকশনে খুঁজবে
+        // Queries only pro collection
         val query = db.collection("users")
             .document(userId)
             .collection("pro_analyzed_charts")
@@ -101,7 +101,7 @@ class AnalysisRepository(private val context: Context) {
             }
             if (snapshot != null && !snapshot.isEmpty) {
                 val document = snapshot.documents[0]
-                // প্রো মডেল এ কনভার্ট হচ্ছে
+                // Convert document to Pro model
                 val response = document.toObject(AnalysisResultModel::class.java)
                 trySend(response)
             }
@@ -110,7 +110,7 @@ class AnalysisRepository(private val context: Context) {
     }
 
     // ==========================================
-    // ৪. FREE HISTORY: ফ্রি হিস্ট্রি নেওয়ার জন্য
+    // 4. FREE HISTORY: Fetch free scan history
     // ==========================================
     fun getHistory(): Flow<List<AnalysisResponse>> = callbackFlow {
         val userId = auth.currentUser?.uid ?: run {
@@ -139,7 +139,7 @@ class AnalysisRepository(private val context: Context) {
     }
 
     // ==========================================
-    // ৫. PRO HISTORY: প্রো হিস্ট্রি নেওয়ার জন্য
+    // 5. PRO HISTORY: Fetch pro scan history
     // ==========================================
     fun getProHistory(): Flow<List<AnalysisResultModel>> = callbackFlow {
         val userId = auth.currentUser?.uid ?: run {

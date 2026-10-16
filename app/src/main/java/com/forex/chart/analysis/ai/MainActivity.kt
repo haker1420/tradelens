@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log // ✅ FCM লগের জন্য ইমপোর্ট
+import android.util.Log // ✅ Import for FCM logs
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -27,7 +27,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging // ✅ FCM সাবস্ক্রিপশনের জন্য ইমপোর্ট
+import com.google.firebase.messaging.FirebaseMessaging // ✅ Import for FCM subscriptions
 import kotlinx.coroutines.delay
 
 private const val PREFS_NAME = "AppPrefs"
@@ -42,11 +42,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ১. ফায়ারবেস এবং আপডেট ম্যানেজার ইনিশিয়ালাইজ
+        // 1. Initialize Firebase and Update Manager
         firebaseAnalytics = Firebase.analytics
         appUpdateManager = AppUpdateManagerFactory.create(this)
 
-        // ✅ ৫. ফায়ারবেস টপিক সাবস্ক্রিপশন (নোটিফিকেশন রিসিভ করার জন্য)
+        // ✅ 5. Firebase topic subscription (to receive notifications)
         FirebaseMessaging.getInstance().subscribeToTopic("market_news")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -56,30 +56,30 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-        // ২. অ্যাডমব SDK ইনিশিয়ালাইজ (এটি মেইন থ্রেড জ্যাম হওয়া আটকাবে)
+        // 2. Initialize AdMob SDK (prevents blocking main thread)
         MobileAds.initialize(this) {}
 
-        // ৩. ইন-অ্যাপ আপডেট চেক
+        // 3. Check for in-app updates
         checkForAppUpdate()
 
-        // ৪. ফার্স্ট ওপেন ট্র্যাকিং লজিক
+        // 4. First app open tracking logic
         handleFirstOpenTracking()
 
         setContent {
             TradeChatAITheme {
                 val context = LocalContext.current
 
-                // ✅ নোটিফিকেশন পারমিশন লজিক (Android 13+)
+                // ✅ Notification permission logic (Android 13+)
                 val permissionLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.RequestPermission()
                 ) { isGranted ->
                     if (!isGranted) {
-                        // ইউজার ডিনাই করলে এখানে হ্যান্ডেল করতে পারো
+                        // Handle user denial here if needed
                     }
                 }
 
                 LaunchedEffect(Unit) {
-                    // সামান্য ডিলে দেওয়া যাতে অ্যাপ লোড হওয়ার সাথে সাথেই পপআপ এসে থ্রেড ব্লক না করে
+                    // Slight delay so dialog does not block main thread immediately on app load
                     delay(1000)
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // তোমার মেইন নেভিগেশন স্ক্রিন
+                    // Main navigation screen
                     MainScreen()
                 }
             }
@@ -115,7 +115,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // --- ইন-অ্যাপ আপডেট ফাংশন সমূহ ---
+    // --- In-App Update Functions ---
     private fun checkForAppUpdate() {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
@@ -138,7 +138,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        // অ্যাপ যখন ব্যাকগ্রাউন্ড থেকে ফিরে আসে তখন আপডেট চেক
+        // Check for updates when app returns from background
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 try {
@@ -160,7 +160,7 @@ class MainActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_REQUEST_CODE) {
             if (resultCode != RESULT_OK) {
-                // আপডেট না করলে অ্যাপ আবার চেক করবে
+                // If update not performed, app checks again
                 checkForAppUpdate()
             }
         }

@@ -106,6 +106,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+    implementation("com.google.android.play:review:2.0.2")
+    implementation("com.google.android.play:review-ktx:2.0.2")
 
     implementation("com.unity3d.ads:unity-ads:4.16.5")
     implementation("com.google.ads.mediation:unity:4.16.5.0")

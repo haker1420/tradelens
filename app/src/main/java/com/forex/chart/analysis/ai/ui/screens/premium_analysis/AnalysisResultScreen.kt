@@ -23,7 +23,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.app.Activity
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import com.forex.chart.analysis.ai.data.manager.InAppReviewManager
+import com.forex.chart.analysis.ai.ui.screens.PremiumRatingDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +38,10 @@ fun AnalysisResultScreen(
     onOpenChat: () -> Unit // ✅ NEW: চ্যাট ওপেন করার জন্য নতুন প্যারামিটার
 ) {
     val result by viewModel.analysisResult.collectAsState()
+    val showRatingDialog by viewModel.showRatingDialog.collectAsState()
+    val context = LocalContext.current
+    val activity = context as? Activity
+    val inAppReviewManager = remember { InAppReviewManager(context) }
 
     if (result == null) {
         Box(modifier = Modifier.fillMaxSize().background(Color(0xFF0B101E)), contentAlignment = Alignment.Center) {
@@ -191,6 +200,24 @@ fun AnalysisResultScreen(
                 }
             }
         }
+    }
+
+    if (showRatingDialog) {
+        PremiumRatingDialog(
+            onDismiss = { viewModel.dismissRatingDialog() },
+            onRateSubmit = { stars ->
+                viewModel.markUserAsRated()
+                if (activity != null) {
+                    inAppReviewManager.launchReviewFlow(activity) { success ->
+                        if (!success) {
+                            inAppReviewManager.openPlayStore(activity)
+                        }
+                    }
+                } else {
+                    inAppReviewManager.openPlayStore(null)
+                }
+            }
+        )
     }
 }
 

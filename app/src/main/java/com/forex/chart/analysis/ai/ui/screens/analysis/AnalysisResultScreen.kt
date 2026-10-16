@@ -50,6 +50,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.forex.chart.analysis.ai.data.model.AnalysisResponse
 import com.forex.chart.analysis.ai.data.model.DetailItem
 import com.forex.chart.analysis.ai.data.manager.AdMobManager
+import com.forex.chart.analysis.ai.data.manager.InAppReviewManager
 import com.forex.chart.analysis.ai.ui.components.AiPoweredBanner
 import com.forex.chart.analysis.ai.ui.components.PremiumPlanDialog
 import com.forex.chart.analysis.ai.ui.screens.PremiumRatingDialog
@@ -78,6 +79,7 @@ fun AnalysisResultScreen(
     val isAnonymous = remember { FirebaseAuth.getInstance().currentUser?.isAnonymous ?: true }
 
     val adMobManager = remember { AdMobManager(context) }
+    val inAppReviewManager = remember { InAppReviewManager(context) }
 
     val isPremium = !isChatLocked
 
@@ -414,10 +416,14 @@ fun AnalysisResultScreen(
             onDismiss = { onDismissRatingDialog() },
             onRateSubmit = { stars ->
                 onMarkUserAsRated()
-                try {
-                    context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("market://details?id=${context.packageName}")))
-                } catch (e: Exception) {
-                    context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${context.packageName}")))
+                if (activity != null) {
+                    inAppReviewManager.launchReviewFlow(activity) { success ->
+                        if (!success) {
+                            inAppReviewManager.openPlayStore(activity)
+                        }
+                    }
+                } else {
+                    inAppReviewManager.openPlayStore(null)
                 }
             }
         )

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TradeLens AI</string>
+    ic_launcher_round
+
+        <string name="smart_analysis_banner">Smart Analysis for Better Outcomes</string>
+        <string name="upload_instruction">Upload your chart image</string>
+        <string name="supported_formats">Supported formats: PNG, JPG, JPEG</string>
+        <string name="upload_from_gallery">Upload from Gallery</string>
+        <string name="snap_with_camera">Snap with Camera</string>
+        <string name="turn_charts_into_profit">Turn Charts into Profit with AI 👋</string>
+
+        <string name="home">Home</string>
+        <string name="history">History</string>
+        <string name="profile">Profile</string>
+    </resources>

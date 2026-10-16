@@ -1,0 +1,84 @@
+{
+  "project_info": {
+    "project_number": "754581553046",
+    "project_id": "radhe-digital-97d9f",
+    "storage_bucket": "radhe-digital-97d9f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754581553046:android:2f84114891da6bd04a67b7",
+        "android_client_info": {
+          "package_name": "com.forex.chart.analysis.ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754581553046-lq7chl8ehae2cru0hapj59158rkge0sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXmTrjTpqY8EsnvN-FCGrEC5U6_fZQ3yM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754581553046-lq7chl8ehae2cru0hapj59158rkge0sm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754581553046:android:4ecf432e618003cc4a67b7",
+        "android_client_info": {
+          "package_name": "com.trade.chart.analysis.ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754581553046-1g8k5sehqlag7lorpdvdu0qmbf349tcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trade.chart.analysis.ai",
+            "certificate_hash": "a9aa5dcb57398068b14ca9daec394b3f9affdf9e"
+          }
+        },
+        {
+          "client_id": "754581553046-fji2eg4qp9o4tiiq4fd6davp4jtddrgv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trade.chart.analysis.ai",
+            "certificate_hash": "8f65ac030ce6d2eaa25d8dbc18ce770c12661c37"
+          }
+        },
+        {
+          "client_id": "754581553046-lq7chl8ehae2cru0hapj59158rkge0sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXmTrjTpqY8EsnvN-FCGrEC5U6_fZQ3yM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754581553046-lq7chl8ehae2cru0hapj59158rkge0sm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
